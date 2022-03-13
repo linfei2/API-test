@@ -1,11 +1,33 @@
 import pytest
 import requests
+import random
+import string
 
 
-def test_register_api_client(base_url):
+@pytest.fixture
+def generate_random_name():
+    name = "".join(random.choices(string.ascii_letters, k=6))
+    return name
+
+
+@pytest.fixture
+def generate_random_email():
+    email = "".join(random.choices(string.ascii_lowercase, k=6)) + "@email.com"
+    return email
+
+
+@pytest.fixture
+def register_api_client(base_url, generate_random_name, generate_random_email):
     url = base_url + "/api-clients/"
-    data = {"clientName": "Jorge", "clientEmail": "jgarcia@example.com"}
+    name = generate_random_name
+    email = generate_random_email
+    data = {"clientName": name, "clientEmail": email}
     resp = requests.post(url, json=data)
+    return resp
+
+
+def test_register_api_client(register_api_client):
+    resp = register_api_client
     j = resp.json()
     assert resp.status_code == 201
     assert j["accessToken"]
