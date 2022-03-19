@@ -107,4 +107,4 @@ def test_delete_order(base_url, submit_order):
     get_response = requests.get(url, headers=headers)
     assert delete_response.status_code == 204
     assert get_response.status_code == 404
-    assert get_response.json()["error"] == f"No order with id {order_id}"
+    assert get_response.json()["error"] == f"No order with id {order_id}."
